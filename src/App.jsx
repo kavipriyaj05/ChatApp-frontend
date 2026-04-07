@@ -1,94 +1,101 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ChatPage from './features/chat/pages/ChatPage';
 
-/**
- * App.jsx — Route declarations for LiveChat.
- *
- * Shared file — each module adds their own routes here.
- * Module 2 (Maha) owns: /chat, /chat/:chatId
- *
- * Placeholders for other modules:
- *   /login, /register, /verify-otp  → Karthik (Module 1)
- *   /groups, /groups/:groupId        → Jeyanth (Module 3)
- *   /notifications                   → Kavi (Module 4)
- */
+// Auth Pages (Karthik's module)
+import LoginPage from './features/auth/pages/LoginPage';
+import RegisterPage from './features/auth/pages/RegisterPage';
+import OtpVerifyPage from './features/auth/pages/OtpVerifyPage';
+import GoogleCallbackPage from './features/auth/pages/GoogleCallbackPage';
 
-// Simple auth guard — checks for token in localStorage.
-// Will be replaced by Karthik's ProtectedRoute when Module 1 is integrated.
+// Protected Route wrapper
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
-  if (!token) {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
   return children;
 };
 
-// Placeholder login page until Karthik's LoginPage is merged
-const LoginPlaceholder = () => (
+// Placeholder for chat page (Maha/Jeyanth will build this)
+const ChatPlaceholder = () => (
   <div style={{
-    display: 'flex', flexDirection: 'column', alignItems: 'center',
-    justifyContent: 'center', height: '100vh',
-    background: '#0f1117', color: '#e8eaf0', gap: '16px'
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: '#0a0a1a',
+    color: '#f0f0ff',
+    fontFamily: "'Inter', sans-serif",
+    gap: '16px',
   }}>
-    <h1 style={{ fontSize: '2rem' }}>💬 LiveChat</h1>
-    <p style={{ color: '#8b93a8' }}>Authentication module (Karthik) not yet integrated.</p>
+    <div style={{ fontSize: '64px' }}>💬</div>
+    <h1 style={{ fontSize: '32px', fontWeight: 700, margin: 0 }}>LiveChat</h1>
+    <p style={{ color: '#8888aa', fontSize: '16px' }}>
+      Welcome! Chat module is being built by your teammates.
+    </p>
     <button
-      style={{
-        padding: '10px 28px', background: '#4f46e5', border: 'none',
-        borderRadius: '24px', color: '#fff', cursor: 'pointer', fontSize: '15px'
-      }}
       onClick={() => {
-        // DEMO: set mock token so chat page is accessible
-        localStorage.setItem('token', 'mock-dev-token');
-        localStorage.setItem('user', JSON.stringify({ id: 1, username: 'maha' }));
-        window.location.href = '/chat';
+        localStorage.clear();
+        window.location.href = '/login';
+      }}
+      style={{
+        marginTop: '16px',
+        padding: '12px 32px',
+        background: 'linear-gradient(135deg, #667eea, #764ba2)',
+        border: 'none',
+        borderRadius: '12px',
+        color: 'white',
+        fontWeight: 600,
+        fontSize: '14px',
+        cursor: 'pointer',
       }}
     >
-      Enter Demo Mode
+      Logout
     </button>
   </div>
 );
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        theme="dark"
+        toastStyle={{
+          background: 'rgba(26, 26, 46, 0.95)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: '12px',
+        }}
+      />
       <Routes>
-        {/* ── Auth Routes — owned by Karthik ── */}
-        <Route path="/login" element={<LoginPlaceholder />} />
-        <Route path="/register" element={<LoginPlaceholder />} />
+        {/* Auth Routes (Public) */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify-otp" element={<OtpVerifyPage />} />
+        <Route path="/auth/callback" element={<GoogleCallbackPage />} />
 
-        {/* ── Chat Routes — owned by Maha ── */}
+        {/* Protected Routes */}
         <Route
           path="/chat"
           element={
             <ProtectedRoute>
-              <ChatPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/chat/:chatId"
-          element={
-            <ProtectedRoute>
-              <ChatPage />
+              <ChatPlaceholder />
             </ProtectedRoute>
           }
         />
 
-        {/* ── Default redirect ── */}
-        <Route path="/" element={<Navigate to="/chat" replace />} />
-        <Route path="*" element={<Navigate to="/chat" replace />} />
+        {/* Default redirect */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
-
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        theme="dark"
-      />
-    </BrowserRouter>
+    </Router>
   );
 }
 
