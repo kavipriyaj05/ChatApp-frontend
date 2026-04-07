@@ -1,101 +1,148 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteMedia } from './features/media/mediaSlice';
+import { FiUploadCloud, FiBell, FiSmile, FiInfo } from 'react-icons/fi';
 
-// Auth Pages (Karthik's module)
-import LoginPage from './features/auth/pages/LoginPage';
-import RegisterPage from './features/auth/pages/RegisterPage';
-import OtpVerifyPage from './features/auth/pages/OtpVerifyPage';
-import GoogleCallbackPage from './features/auth/pages/GoogleCallbackPage';
+import MediaUpload from './components/media/MediaUpload';
+import MediaPreview from './components/media/MediaPreview';
+import NotificationBell from './components/notification/NotificationBell';
+import NotificationPanel from './components/notification/NotificationPanel';
+import EmojiReactionPicker from './components/reaction/EmojiReactionPicker';
+import ReactionDisplay from './components/reaction/ReactionDisplay';
 
-// Protected Route wrapper
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-};
-
-// Placeholder for chat page (Maha/Jeyanth will build this)
-const ChatPlaceholder = () => (
-  <div style={{
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: '#0a0a1a',
-    color: '#f0f0ff',
-    fontFamily: "'Inter', sans-serif",
-    gap: '16px',
-  }}>
-    <div style={{ fontSize: '64px' }}>💬</div>
-    <h1 style={{ fontSize: '32px', fontWeight: 700, margin: 0 }}>LiveChat</h1>
-    <p style={{ color: '#8888aa', fontSize: '16px' }}>
-      Welcome! Chat module is being built by your teammates.
-    </p>
-    <button
-      onClick={() => {
-        localStorage.clear();
-        window.location.href = '/login';
-      }}
-      style={{
-        marginTop: '16px',
-        padding: '12px 32px',
-        background: 'linear-gradient(135deg, #667eea, #764ba2)',
-        border: 'none',
-        borderRadius: '12px',
-        color: 'white',
-        fontWeight: 600,
-        fontSize: '14px',
-        cursor: 'pointer',
-      }}
-    >
-      Logout
-    </button>
-  </div>
-);
+import './App.css';
 
 function App() {
+  const dispatch = useDispatch();
+  const { uploadedFiles } = useSelector((s) => s.media);
+
+  const handleDelete = (id) => dispatch(deleteMedia(id));
+
   return (
-    <Router>
-      <ToastContainer
-        position="top-right"
-        autoClose={4000}
-        hideProgressBar={false}
-        theme="dark"
-        toastStyle={{
-          background: 'rgba(26, 26, 46, 0.95)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: '12px',
-        }}
-      />
-      <Routes>
-        {/* Auth Routes (Public) */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/verify-otp" element={<OtpVerifyPage />} />
-        <Route path="/auth/callback" element={<GoogleCallbackPage />} />
+    <div className="app">
+      {/* ── Top Bar ──────────────────────────────────────────── */}
+      <header className="app-topbar">
+        <div className="app-topbar__brand">
+          <div className="app-topbar__logo">LC</div>
+          <span className="app-topbar__name">LiveChat</span>
+        </div>
+        <div className="app-topbar__actions">
+          <NotificationBell />
+        </div>
+      </header>
 
-        {/* Protected Routes */}
-        <Route
-          path="/chat"
-          element={
-            <ProtectedRoute>
-              <ChatPlaceholder />
-            </ProtectedRoute>
-          }
-        />
+      {/* ── Notification Panel (slide-in) ────────────────────── */}
+      <NotificationPanel />
 
-        {/* Default redirect */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </Router>
+      {/* ── Demo Page ────────────────────────────────────────── */}
+      <main className="demo-page">
+        <h1 className="demo-page__title">Kavi's Module</h1>
+        <p className="demo-page__subtitle">
+          Media Upload · Notifications · Message Reactions
+        </p>
+
+        {/* Info */}
+        <div className="demo-info">
+          <FiInfo size={18} className="demo-info__icon" />
+          <p className="demo-info__text">
+            This page showcases <strong>Kavi's frontend components</strong> —
+            the media upload system, notification panel (click the bell icon ↗),
+            and emoji reaction system. These integrate with the backend
+            <strong> /api/media</strong>, <strong>/api/notifications</strong>,
+            and <strong>/api/reactions</strong> endpoints.
+          </p>
+        </div>
+
+        {/* ── 1. Media Upload ────────────────────────────────── */}
+        <section className="demo-section" id="section-media-upload">
+          <div className="demo-section__header">
+            <div className="demo-section__icon demo-section__icon--media">
+              <FiUploadCloud />
+            </div>
+            <h2 className="demo-section__title">Media Upload</h2>
+          </div>
+          <div className="demo-section__card">
+            <MediaUpload
+              onUploadComplete={(file) =>
+                console.log('Upload complete:', file)
+              }
+            />
+            {uploadedFiles.length > 0 && (
+              <div className="demo-uploaded-grid">
+                {uploadedFiles.map((file) => (
+                  <MediaPreview
+                    key={file.id}
+                    media={file}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ── 2. Notifications ───────────────────────────────── */}
+        <section className="demo-section" id="section-notifications">
+          <div className="demo-section__header">
+            <div className="demo-section__icon demo-section__icon--notif">
+              <FiBell />
+            </div>
+            <h2 className="demo-section__title">Notifications</h2>
+          </div>
+          <div className="demo-section__card">
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+              Click the <strong>bell icon</strong> in the top-right corner to
+              open the notification panel. Notifications arrive in real-time
+              via WebSocket and are persisted through the REST API.
+            </p>
+          </div>
+        </section>
+
+        {/* ── 3. Message Reactions ───────────────────────────── */}
+        <section className="demo-section" id="section-reactions">
+          <div className="demo-section__header">
+            <div className="demo-section__icon demo-section__icon--reaction">
+              <FiSmile />
+            </div>
+            <h2 className="demo-section__title">Message Reactions</h2>
+          </div>
+          <div className="demo-section__card">
+            {/* Mock message with reaction support */}
+            <div className="demo-message">
+              <div className="demo-message__avatar">K</div>
+              <div className="demo-message__body">
+                <div className="demo-message__bubble">
+                  <p className="demo-message__text">
+                    Hey team! 🎉 The new media upload feature is live. Try
+                    dragging and dropping files above!
+                  </p>
+                </div>
+                <div className="demo-message__meta">
+                  <span className="demo-message__time">2:30 PM</span>
+                  <EmojiReactionPicker messageId={1} position="bottom" />
+                </div>
+                <ReactionDisplay messageId={1} currentUserId={1} />
+              </div>
+            </div>
+
+            <div className="demo-message" style={{ marginTop: '1.25rem' }}>
+              <div className="demo-message__avatar" style={{ background: 'linear-gradient(135deg, #63dcbe, #4acd9f)' }}>M</div>
+              <div className="demo-message__body">
+                <div className="demo-message__bubble" style={{ background: 'rgba(99, 220, 190, 0.1)', borderColor: 'rgba(99, 220, 190, 0.15)' }}>
+                  <p className="demo-message__text">
+                    Looks awesome! The drag-and-drop feels really smooth 🚀
+                  </p>
+                </div>
+                <div className="demo-message__meta">
+                  <span className="demo-message__time">2:32 PM</span>
+                  <EmojiReactionPicker messageId={2} position="bottom" />
+                </div>
+                <ReactionDisplay messageId={2} currentUserId={1} />
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
   );
 }
 
