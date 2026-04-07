@@ -13,10 +13,13 @@ const axiosInstance = axios.create({
 // Request interceptor — attach JWT Bearer token
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    // Temporary: pass user ID header for dev mode
+    const userId = localStorage.getItem('userId') || '1';
+    config.headers['X-User-Id'] = userId;
     return config;
   },
   (error) => Promise.reject(error)

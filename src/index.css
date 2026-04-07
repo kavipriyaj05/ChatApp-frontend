@@ -39,44 +39,111 @@
 *::after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-html {
+:root {
+  /* Color tokens */
+  --bg: #020617;
+  --surface: #0f172a;
+  --surface-2: #1e293b;
+  --surface-hover: #334155;
+  --border: #1e293b;
+  --accent: #6366f1;
+  --accent-bg: rgba(99, 102, 241, 0.15);
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --warning: #f59e0b;
+
+  /* Typography */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text);
+  background-color: var(--bg);
+
+  /* Rendering */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  font-family: var(--font-family);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
-a {
-  color: var(--accent-primary);
-  text-decoration: none;
-  transition: color 0.2s;
+/* ========================
+   BUTTON SYSTEM
+   ======================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
 }
 
-a:hover {
-  color: var(--accent-secondary);
+.btn--primary {
+  background: var(--accent);
+  color: #fff;
 }
 
-button {
-  font-family: var(--font-family);
+.btn--primary:hover {
+  background: #4f46e5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
-img, video {
-  max-width: 100%;
-  display: block;
+.btn--secondary {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
 }
 
-/* ── Scrollbar ────────────────────────────────────────────────── */
+.btn--secondary:hover {
+  background: var(--surface-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.btn--ghost:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.btn--danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+}
+
+.btn--danger:hover {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.btn--full {
+  width: 100%;
+}
+
+/* ========================
+   SCROLLBAR
+   ======================== */
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -87,23 +154,29 @@ img, video {
 }
 
 ::-webkit-scrollbar-thumb {
+  background: var(--border);
   background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--surface-hover);
 }
 
-/* ── Utility ──────────────────────────────────────────────────── */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+/* ========================
+   ANIMATIONS
+   ======================== */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }

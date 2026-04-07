@@ -1,0 +1,170 @@
+.group-info-panel {
+  width: 360px;
+  min-width: 360px;
+  height: 100%;
+  background: var(--surface, #0f172a);
+  border-left: 1px solid var(--border, #1e293b);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.group-info-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid var(--border, #1e293b);
+}
+
+.group-info-panel__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text, #f1f5f9);
+  margin: 0;
+}
+
+.group-info-panel__close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted, #94a3b8);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.group-info-panel__close:hover {
+  background: var(--surface-hover, #334155);
+}
+
+.group-info-panel__body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.group-info-panel__avatar-section {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0 16px;
+}
+
+.group-info-panel__avatar {
+  width: 80px;
+  height: 80px;
+}
+
+.group-info-panel__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.group-info-panel__avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent, #6366f1), #a855f7);
+}
+
+.group-info-panel__details {
+  text-align: center;
+  padding: 0 20px 20px;
+}
+
+.group-info-panel__name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text, #f1f5f9);
+  margin: 0 0 6px;
+}
+
+.group-info-panel__desc {
+  font-size: 14px;
+  color: var(--text-muted, #94a3b8);
+  margin: 0 0 8px;
+}
+
+.group-info-panel__meta {
+  font-size: 13px;
+  color: var(--text-muted, #94a3b8);
+  margin: 0 0 16px;
+}
+
+.group-info-panel__admin-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.group-info-panel__form {
+  padding: 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.group-info-panel__input,
+.group-info-panel__textarea {
+  background: var(--surface-2, #1e293b);
+  border: 1px solid var(--border, #334155);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text, #f1f5f9);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: none;
+}
+
+.group-info-panel__input:focus,
+.group-info-panel__textarea:focus {
+  border-color: var(--accent, #6366f1);
+}
+
+.group-info-panel__form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.group-info-panel__add-member {
+  padding: 0 20px 16px;
+}
+
+.group-info-panel__loader {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+.group-info-panel__spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--border, #334155);
+  border-top-color: var(--accent, #6366f1);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@media (max-width: 768px) {
+  .group-info-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+  }
+}
