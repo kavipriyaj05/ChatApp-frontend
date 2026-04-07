@@ -5,42 +5,42 @@ import axiosInstance from '../../services/axiosInstance';
 // ========================
 
 export const createGroup = async (groupData) => {
-  const response = await axiosInstance.post('/groups', groupData);
+  const response = await axiosInstance.post('/api/groups', groupData);
   return response.data;
 };
 
 export const getGroup = async (groupId) => {
-  const response = await axiosInstance.get(`/groups/${groupId}`);
+  const response = await axiosInstance.get(`/api/groups/${groupId}`);
   return response.data;
 };
 
 export const updateGroup = async (groupId, groupData) => {
-  const response = await axiosInstance.put(`/groups/${groupId}`, groupData);
+  const response = await axiosInstance.put(`/api/groups/${groupId}`, groupData);
   return response.data;
 };
 
 export const deleteGroup = async (groupId) => {
-  const response = await axiosInstance.delete(`/groups/${groupId}`);
+  const response = await axiosInstance.delete(`/api/groups/${groupId}`);
   return response.data;
 };
 
 export const addMember = async (groupId, userId) => {
-  const response = await axiosInstance.post(`/groups/${groupId}/members`, { userId });
+  const response = await axiosInstance.post(`/api/groups/${groupId}/members`, { userId });
   return response.data;
 };
 
 export const removeMember = async (groupId, userId) => {
-  const response = await axiosInstance.delete(`/groups/${groupId}/members/${userId}`);
+  const response = await axiosInstance.delete(`/api/groups/${groupId}/members/${userId}`);
   return response.data;
 };
 
 export const updateMemberRole = async (groupId, userId, role) => {
-  const response = await axiosInstance.put(`/groups/${groupId}/members/${userId}/role`, { role });
+  const response = await axiosInstance.put(`/api/groups/${groupId}/members/${userId}/role`, { role });
   return response.data;
 };
 
 export const getGroupMembers = async (groupId) => {
-  const response = await axiosInstance.get(`/groups/${groupId}/members`);
+  const response = await axiosInstance.get(`/api/groups/${groupId}/members`);
   return response.data;
 };
 
@@ -49,16 +49,16 @@ export const getGroupMembers = async (groupId) => {
 // ========================
 
 export const searchUsers = async (query) => {
-  const response = await axiosInstance.get(`/users/search?q=${encodeURIComponent(query)}`);
+  const response = await axiosInstance.get(`/api/users/search?q=${encodeURIComponent(query)}`);
   return response.data;
 };
 
 export const getUserStatus = async (userId) => {
-  const response = await axiosInstance.get(`/users/${userId}/status`);
+  const response = await axiosInstance.get(`/api/users/${userId}/status`);
   return response.data;
 };
 
 export const getChatList = async () => {
-  const response = await axiosInstance.get('/users/me/chats');
+  const response = await axiosInstance.get('/api/users/me/chats');
   return response.data;
 };

@@ -27,7 +27,7 @@ import {
 const useWebSocket = (chatId, currentUserId) => {
   const dispatch = useDispatch();
   const typingTimerRef = useRef(null);
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('accessToken');
 
   // ── Connect on mount, disconnect on unmount ─────────────────────────────
   useEffect(() => {

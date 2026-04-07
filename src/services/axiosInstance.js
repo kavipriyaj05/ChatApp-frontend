@@ -13,13 +13,10 @@ const axiosInstance = axios.create({
 // Request interceptor — attach JWT Bearer token
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    // Temporary: pass user ID header for dev mode
-    const userId = localStorage.getItem('userId') || '1';
-    config.headers['X-User-Id'] = userId;
     return config;
   },
   (error) => Promise.reject(error)
@@ -33,19 +30,21 @@ axiosInstance.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      
+
       const refreshToken = localStorage.getItem('refreshToken');
       if (refreshToken) {
         try {
           const { data } = await axios.post(`${API_BASE_URL}/api/auth/refresh-token`, {
             refreshToken,
           });
-          localStorage.setItem('accessToken', data.accessToken);
-          originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+          // Backend returns "token" not "accessToken"
+          localStorage.setItem('accessToken', data.token);
+          originalRequest.headers.Authorization = `Bearer ${data.token}`;
           return axiosInstance(originalRequest);
         } catch (refreshError) {
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
+          localStorage.removeItem('user');
           window.location.href = '/login';
           return Promise.reject(refreshError);
         }

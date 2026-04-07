@@ -35,15 +35,31 @@ export const disconnectWebSocket = () => {
   }
 };
 
+// Track active subscriptions for unsubscribe support
+const subscriptions = {};
+
 export const subscribe = (destination, callback) => {
   if (stompClient && stompClient.connected) {
-    return stompClient.subscribe(destination, (message) => {
+    const sub = stompClient.subscribe(destination, (message) => {
       const body = JSON.parse(message.body);
       callback(body);
     });
+    subscriptions[destination] = sub;
+    return sub;
   }
   console.warn('WebSocket not connected. Cannot subscribe to:', destination);
   return null;
+};
+
+// Alias used by Maha's useWebSocket hook
+export const subscribeToTopic = subscribe;
+
+export const unsubscribeFromTopic = (destination) => {
+  const sub = subscriptions[destination];
+  if (sub) {
+    sub.unsubscribe();
+    delete subscriptions[destination];
+  }
 };
 
 export const sendMessage = (destination, body) => {
@@ -57,12 +73,21 @@ export const sendMessage = (destination, body) => {
   }
 };
 
+// Alias used by Maha's useWebSocket hook
+export const publishMessage = sendMessage;
+
+export const isConnected = () => !!(stompClient && stompClient.connected);
+
 export const getStompClient = () => stompClient;
 
 export default {
   connectWebSocket,
   disconnectWebSocket,
   subscribe,
+  subscribeToTopic,
+  unsubscribeFromTopic,
   sendMessage,
+  publishMessage,
+  isConnected,
   getStompClient,
 };
