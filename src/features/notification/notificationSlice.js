@@ -19,7 +19,7 @@ export const fetchUnreadCount = createAsyncThunk(
   'notification/fetchUnreadCount',
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axiosInstance.get('/api/notifications/unread/count');
+      const { data } = await axiosInstance.get('/api/notifications/unread-count');
       return data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Failed to fetch count');

@@ -9,6 +9,7 @@ import GoogleCallbackPage from './features/auth/pages/GoogleCallbackPage';
 
 // ── Chat Page (Maha) ───────────────────────────────────────────
 import ChatPage from './features/chat/pages/ChatPage';
+import UserSearchPage from './features/chat/pages/UserSearchPage';
 
 // ── Group Page (Jeyanth) ───────────────────────────────────────
 import GroupPage from './features/group/pages/GroupPage';
@@ -47,6 +48,14 @@ function App() {
         element={
           <ProtectedRoute>
             <ChatPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute>
+            <UserSearchPage />
           </ProtectedRoute>
         }
       />

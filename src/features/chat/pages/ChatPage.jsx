@@ -7,7 +7,7 @@ import {
   selectActiveChatId,
   setActiveChat,
 } from '../chatSlice';
-import { fetchChatById } from '../chatApi';
+import { fetchAllChats, fetchChatById } from '../chatApi';
 import ChatWindow from '../components/ChatWindow';
 import '../../../styles/chat.css';
 
@@ -31,13 +31,18 @@ const ChatPage = () => {
   const activeChatId = useSelector(selectActiveChatId);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Pull current user from localStorage (set by Karthik's authSlice on login)
-  const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-  const currentUserId = storedUser?.id;
+  // Pull current user from Redux state (set by authSlice on login)
+  const { user: authUser } = useSelector((s) => s.auth);
+  const currentUserId = authUser?.id;
+
+  // ── Fetch chat list on mount ─────────────────────────────────────────────
+  useEffect(() => {
+    dispatch(fetchAllChats());
+  }, [dispatch]);
 
   // ── If navigated with a chatId param, load that chat ─────────────────────
   useEffect(() => {
-    if (paramChatId) {
+    if (paramChatId && Number(paramChatId) !== activeChatId) {
       dispatch(fetchChatById(Number(paramChatId))).then((chat) => {
         if (chat) dispatch(setActiveChat(chat));
       });
@@ -85,21 +90,30 @@ const ChatPage = () => {
         <div className="sidebar-header">
           <div className="sidebar-user">
             <div className="sidebar-avatar">
-              {storedUser?.profilePicture ? (
-                <img src={storedUser.profilePicture} alt="me" />
+              {authUser?.profilePicture ? (
+                <img src={authUser.profilePicture} alt="me" />
               ) : (
-                <span>{storedUser?.username?.charAt(0)?.toUpperCase() || 'U'}</span>
+                <span>{authUser?.username?.charAt(0)?.toUpperCase() || 'U'}</span>
               )}
             </div>
             <h2 className="sidebar-title">Chats</h2>
           </div>
-          <button
-            className="sidebar-new-chat-btn"
-            title="New Chat"
-            onClick={() => navigate('/users')}
-          >
-            ✏️
-          </button>
+          <div style={{ display: 'flex', gap: 4 }}>
+            <button
+              className="sidebar-new-chat-btn"
+              title="Search Users & New Chat"
+              onClick={() => navigate('/users')}
+            >
+              🔍
+            </button>
+            <button
+              className="sidebar-new-chat-btn"
+              title="Create Group"
+              onClick={() => navigate('/groups')}
+            >
+              👥
+            </button>
+          </div>
         </div>
 
         {/* Search bar */}

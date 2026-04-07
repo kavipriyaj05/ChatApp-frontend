@@ -18,7 +18,8 @@ export default function GroupInfoPanel({ groupId, onDeleted }) {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({ name: '', description: '', avatar: '' });
   const [showAddMember, setShowAddMember] = useState(false);
-  const currentUserId = Number(localStorage.getItem('userId') || '1');
+  const [toast, setToast] = useState(null);
+  const currentUserId = useSelector((s) => s.auth.user?.id);
 
   useEffect(() => {
     if (groupId) {
@@ -38,7 +39,7 @@ export default function GroupInfoPanel({ groupId, onDeleted }) {
   }, [selectedGroup]);
 
   const isAdmin = members.some(
-    (m) => m.userId === currentUserId && m.role === 'ADMIN'
+    (m) => Number(m.userId) === Number(currentUserId) && m.role === 'ADMIN'
   );
 
   const handleSave = () => {
@@ -53,11 +54,20 @@ export default function GroupInfoPanel({ groupId, onDeleted }) {
     }
   };
 
-  const handleAddUser = (user) => {
-    dispatch(addGroupMember({ groupId, userId: user.id })).then(() => {
+  const showToast = (msg, type = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const handleAddUser = async (user) => {
+    try {
+      await dispatch(addGroupMember({ groupId, userId: user.id })).unwrap();
       dispatch(fetchGroupMembers(groupId));
-    });
-    setShowAddMember(false);
+      dispatch(fetchGroupDetails(groupId));
+      showToast(`${user.username} added to the group!`);
+    } catch (err) {
+      showToast(`Failed to add member: ${err}`, 'error');
+    }
   };
 
   if (selectedGroupLoading) {
@@ -87,12 +97,18 @@ export default function GroupInfoPanel({ groupId, onDeleted }) {
         <div className="group-info-panel__avatar-section">
           <div className="group-info-panel__avatar">
             {selectedGroup.avatar ? (
-              <img src={selectedGroup.avatar} alt="" />
-            ) : (
-              <span className="group-info-panel__avatar-fallback">
-                {selectedGroup.name?.[0]?.toUpperCase() || '#'}
-              </span>
-            )}
+              <img
+                src={selectedGroup.avatar}
+                alt=""
+                onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+              />
+            ) : null}
+            <span
+              className="group-info-panel__avatar-fallback"
+              style={{ display: selectedGroup.avatar ? 'none' : 'flex' }}
+            >
+              {selectedGroup.name?.[0]?.toUpperCase() || '#'}
+            </span>
           </div>
         </div>
 
@@ -166,6 +182,20 @@ export default function GroupInfoPanel({ groupId, onDeleted }) {
           />
         )}
       </div>
+
+      {/* Toast notification */}
+      {toast && (
+        <div style={{
+          position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
+          padding: '12px 20px', borderRadius: 10,
+          background: toast.type === 'error' ? '#ef4444' : '#22c55e',
+          color: '#fff', fontWeight: 600, fontSize: 14,
+          boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+          animation: 'slideUp 0.3s ease'
+        }}>
+          {toast.type === 'error' ? '❌' : '✅'} {toast.msg}
+        </div>
+      )}
     </div>
   );
 }

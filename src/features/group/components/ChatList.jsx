@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { fetchChatList, setShowCreateModal } from '../groupSlice';
 import ChatListItemComponent from './ChatListItem';
 import SearchBar from './SearchBar';
@@ -7,6 +8,7 @@ import './ChatList.css';
 
 export default function ChatList({ activeId, onSelect }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { chatList, chatListLoading } = useSelector((state) => state.group);
 
   useEffect(() => {
@@ -16,7 +18,17 @@ export default function ChatList({ activeId, onSelect }) {
   return (
     <aside className="chat-list" id="chat-list-sidebar">
       <header className="chat-list__header">
-        <h2 className="chat-list__title">Chats</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button
+            className="chat-list__create-btn"
+            onClick={() => navigate('/chat')}
+            title="Back to Chats"
+            style={{ fontSize: 16 }}
+          >
+            ←
+          </button>
+          <h2 className="chat-list__title">Groups</h2>
+        </div>
         <button
           className="chat-list__create-btn"
           onClick={() => dispatch(setShowCreateModal(true))}

@@ -11,6 +11,19 @@ import {
   updateMessageStatus,
 } from './chatSlice';
 
+// ── Fetch All Chats for Sidebar ───────────────────────────────────────────────
+export const fetchAllChats = () => async (dispatch) => {
+  dispatch(setChatsLoading(true));
+  try {
+    const res = await axiosInstance.get('/api/chats/user');
+    dispatch(setChats(res.data));
+    return res.data;
+  } catch (err) {
+    dispatch(setChatsError(err.response?.data?.message || 'Failed to load chats'));
+    throw err;
+  }
+};
+
 // ── Create or Get a 1-to-1 Chat ───────────────────────────────────────────────
 export const createOrGetChat = (targetUserId) => async (dispatch) => {
   try {

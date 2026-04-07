@@ -7,7 +7,7 @@ export const fetchReactions = createAsyncThunk(
   'reaction/fetchReactions',
   async (messageId, { rejectWithValue }) => {
     try {
-      const { data } = await axiosInstance.get(`/api/reactions/message/${messageId}`);
+      const { data } = await axiosInstance.get(`/api/media/messages/${messageId}/reactions`);
       return { messageId, reactions: data };
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Failed to fetch reactions');
@@ -19,7 +19,7 @@ export const addReaction = createAsyncThunk(
   'reaction/addReaction',
   async ({ messageId, emoji }, { rejectWithValue }) => {
     try {
-      const { data } = await axiosInstance.post('/api/reactions', { messageId, emoji });
+      const { data } = await axiosInstance.post(`/api/media/messages/${messageId}/reactions`, { emoji });
       return data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Failed to add reaction');
@@ -31,7 +31,7 @@ export const removeReaction = createAsyncThunk(
   'reaction/removeReaction',
   async (reactionId, { rejectWithValue }) => {
     try {
-      await axiosInstance.delete(`/api/reactions/${reactionId}`);
+      await axiosInstance.delete(`/api/media/messages/0/reactions/${reactionId}`);
       return reactionId;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Failed to remove reaction');

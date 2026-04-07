@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChatList from '../components/ChatList';
 import GroupInfoPanel from '../components/GroupInfoPanel';
+import GroupChatWindow from '../components/GroupChatWindow';
 import {
   createNewGroup,
   setShowCreateModal,
@@ -60,13 +61,8 @@ export default function GroupPage() {
               )}
             </header>
 
-            <div className="group-page__messages-placeholder">
-              <div className="group-page__placeholder-content">
-                <span className="group-page__placeholder-icon">💬</span>
-                <h3>Chat area</h3>
-                <p>Messages will appear here when Maha's chat module is integrated</p>
-              </div>
-            </div>
+            {/* Group Chat Window */}
+            <GroupChatWindow groupId={activeItem.id} groupName={activeItem.name} />
           </div>
         ) : (
           <div className="group-page__welcome">

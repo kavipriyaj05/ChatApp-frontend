@@ -67,7 +67,7 @@ export default function SearchBar({ onSelectUser }) {
             <li
               key={user.id}
               className="search-bar__result"
-              onClick={() => handleSelect(user)}
+              onMouseDown={(e) => { e.preventDefault(); handleSelect(user); }}
             >
               <div className="search-bar__avatar">
                 {user.profilePicture ? (

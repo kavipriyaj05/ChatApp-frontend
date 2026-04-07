@@ -14,6 +14,7 @@ const GoogleCallbackPage = () => {
     const refreshToken = searchParams.get('refreshToken');
     const username = searchParams.get('username');
     const email = searchParams.get('email');
+    const userId = searchParams.get('userId');
     const error = searchParams.get('error');
 
     if (error) {
@@ -22,7 +23,7 @@ const GoogleCallbackPage = () => {
     }
 
     if (token) {
-      dispatch(setOAuth2Tokens({ token, refreshToken, username, email }));
+      dispatch(setOAuth2Tokens({ token, refreshToken, username, email, userId: userId ? Number(userId) : null }));
       navigate('/chat');
     } else {
       navigate('/login', { state: { error: 'Authentication failed. No token received.' } });

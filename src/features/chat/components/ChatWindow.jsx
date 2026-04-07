@@ -68,8 +68,8 @@ const ChatWindow = ({ currentUserId }) => {
 
   // ── Send handler ─────────────────────────────────────────────────────────
   const handleSend = useCallback(
-    ({ content, messageType }) => {
-      sendMessage({ content, messageType });
+    ({ content, messageType, mediaId }) => {
+      sendMessage({ content, messageType, mediaId });
     },
     [sendMessage]
   );

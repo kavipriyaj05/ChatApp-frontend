@@ -24,6 +24,7 @@ export const loginUser = createAsyncThunk(
         localStorage.setItem('accessToken', response.data.token);
         localStorage.setItem('refreshToken', response.data.refreshToken);
         localStorage.setItem('user', JSON.stringify({
+          id: response.data.userId,
           username: response.data.username,
           email: response.data.email,
         }));
@@ -121,15 +122,15 @@ const authSlice = createSlice({
       state.message = null;
     },
     setOAuth2Tokens: (state, action) => {
-      const { token, refreshToken, username, email } = action.payload;
+      const { token, refreshToken, username, email, userId } = action.payload;
       state.token = token;
       state.refreshToken = refreshToken;
-      state.user = { username, email };
+      state.user = { id: userId, username, email };
       state.isAuthenticated = true;
       state.isVerified = true;
       localStorage.setItem('accessToken', token);
       localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify({ username, email }));
+      localStorage.setItem('user', JSON.stringify({ id: userId, username, email }));
     },
   },
   extraReducers: (builder) => {
@@ -162,6 +163,7 @@ const authSlice = createSlice({
           state.token = action.payload.token;
           state.refreshToken = action.payload.refreshToken;
           state.user = {
+            id: action.payload.userId,
             username: action.payload.username,
             email: action.payload.email,
           };
