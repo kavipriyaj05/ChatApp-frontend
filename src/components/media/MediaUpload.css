@@ -1,0 +1,211 @@
+/* ── Media Upload ──────────────────────────────────────────────── */
+
+.media-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Drop zone */
+.media-upload__dropzone {
+  position: relative;
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s, background 0.3s, transform 0.2s;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+}
+
+.media-upload__dropzone:hover {
+  border-color: rgba(124, 131, 255, 0.5);
+  background: rgba(124, 131, 255, 0.04);
+}
+
+.media-upload__dropzone--active {
+  border-color: #7c83ff;
+  background: rgba(124, 131, 255, 0.08);
+  transform: scale(1.01);
+}
+
+.media-upload__dropzone--has-file {
+  border-style: solid;
+  border-color: rgba(124, 131, 255, 0.3);
+  cursor: default;
+}
+
+.media-upload__input {
+  display: none;
+}
+
+/* Placeholder */
+.media-upload__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.media-upload__icon-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(124, 131, 255, 0.15), rgba(99, 220, 190, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+
+.media-upload__icon {
+  font-size: 28px;
+  color: #7c83ff;
+}
+
+.media-upload__title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.media-upload__subtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+.media-upload__browse {
+  color: #7c83ff;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+/* Preview */
+.media-upload__preview {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.media-upload__preview-img {
+  max-height: 200px;
+  max-width: 100%;
+  border-radius: 12px;
+  object-fit: contain;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.media-upload__preview-video {
+  max-height: 200px;
+  max-width: 100%;
+  border-radius: 12px;
+}
+
+.media-upload__file-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: #7c83ff;
+}
+
+.media-upload__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.media-upload__filename {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  word-break: break-all;
+  text-align: center;
+}
+
+.media-upload__filesize {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.media-upload__clear {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 80, 80, 0.8);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  font-size: 14px;
+}
+
+.media-upload__clear:hover {
+  background: #ff4444;
+  transform: scale(1.1);
+}
+
+/* Upload Button */
+.media-upload__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #7c83ff, #63dcbe);
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.media-upload__btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.media-upload__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.media-upload__spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error */
+.media-upload__error {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0;
+  padding: 0.5rem;
+  background: rgba(255, 107, 107, 0.08);
+  border-radius: 8px;
+}

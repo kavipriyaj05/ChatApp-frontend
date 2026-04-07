@@ -1,0 +1,52 @@
+/* ── Reaction Display ──────────────────────────────────────────── */
+
+.reaction-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.reaction-display__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  font-size: 0.82rem;
+}
+
+.reaction-display__pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.reaction-display__pill--mine {
+  background: rgba(124, 131, 255, 0.12);
+  border-color: rgba(124, 131, 255, 0.3);
+}
+
+.reaction-display__pill--mine:hover {
+  background: rgba(124, 131, 255, 0.2);
+}
+
+.reaction-display__emoji {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.reaction-display__count {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1;
+}
+
+.reaction-display__pill--mine .reaction-display__count {
+  color: #7c83ff;
+}
