@@ -1,17 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from '../features/auth/authSlice';
+import chatReducer from '../features/chat/chatSlice';
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
-    auth: authReducer,
-    // Other slices will be added by team members:
-    // chat: chatReducer,    (Maha)
-    // group: groupReducer,  (Jeyanth)
-    // media: mediaReducer,  (Kavi)
+    chat: chatReducer,
+    // auth: authReducer,    // Karthik's slice — added by Karthik (Module 1)
+    // group: groupReducer,  // Jeyanth's slice — added by Jeyanth (Module 3)
+    // media: mediaReducer,  // Kavi's slice   — added by Kavi (Module 4)
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false,
+      serializableCheck: {
+        // Ignore non-serializable date values in Redux state
+        ignoredPaths: ['chat.messages'],
+      },
     }),
 });
 

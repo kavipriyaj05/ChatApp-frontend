@@ -21,7 +21,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor — handle 401
+// ── Response interceptor: handle 401 globally ────────────────────────────────
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
