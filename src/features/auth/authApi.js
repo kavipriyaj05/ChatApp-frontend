@@ -23,7 +23,8 @@ const authApi = {
     axiosInstance.post(`${AUTH_BASE}/reset-password`, data),
 
   googleLogin: () => {
-    window.location.href = `http://localhost:8080${AUTH_BASE}/oauth2/google`;
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+    window.location.href = `${baseUrl}/oauth2/authorization/google`;
   },
 };
 
